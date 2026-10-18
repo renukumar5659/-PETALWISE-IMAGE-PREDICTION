@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PetalWise — Image Prediction</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+<header class="hero">
+  <div class="eyebrow">DEEP LEARNING · TENSORFLOW / KERAS</div>
+  <h1>🌸 PetalWise Image Classifier</h1>
+  <p>Identify an Iris flower species by uploading a photo.</p>
+  <div class="hero-tags" style="margin-top: 14px;">
+    <a href="{{ url_for('index') }}" style="color: #ede9fe; text-decoration: none; padding: 6px 12px; border: 1px solid #ffffff40; border-radius: 99px; font-size: 0.82rem; font-weight: 600;">← Back to Measurement Prediction</a>
+  </div>
+</header>
+
+<main>
+  <div class="layout" style="grid-template-columns: 1fr 1fr;">
+    <!-- UPLOAD PANEL -->
+    <div class="panel form-panel">
+      <h2>Upload Flower Image</h2>
+      <p class="muted">Select a JPG, JPEG, PNG, or WEBP photo of an Iris flower (max 10 MB).</p>
+
+      {% if error %}
+        <div class="error">{{ error }}</div>
+      {% endif %}
+
+      <form action="{{ url_for('image_prediction') }}" method="post" enctype="multipart/form-data" style="display: flex; flex-direction: column; gap: 14px;">
+        <label>
+          Choose flower image
+          <input
+            type="file"
+            name="flower_image"
+            id="flower_image"
+            accept=".jpg,.jpeg,.png,.webp"
+            required
+            style="margin-top: 8px;">
+        </label>
+
+        <button type="submit" style="margin-top: 6px;">✨ Predict Species from Image</button>
+      </form>
+
+      {% if image_url %}
+        <div style="margin-top: 24px;">
+          <h3 style="margin-bottom: 8px;">Uploaded Image</h3>
+          <img
+            src="{{ image_url }}"
+            alt="Uploaded Iris flower"
+            style="max-width: 100%; max-height: 280px; border-radius: 12px; border: 1px solid #e5e7eb; object-fit: cover;">
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- PREDICTION RESULTS PANEL -->
+    <div class="panel">
+      <h2>Image Classification Result</h2>
+      <p class="muted">Trained Deep Convolutional Neural Network output.</p>
+
+      {% if result %}
+        <div class="result" style="margin-top: 0;">
+          <div class="result-label">PREDICTED SPECIES</div>
+          <h3>{{ result.species }}</h3>
+          <p>Confidence: <strong style="color: #4c1d95; font-size: 1.1rem;">{{ '%.2f'|format(result.confidence) }}%</strong></p>
+
+          {% if result.probabilities %}
+            <div style="margin-top: 18px;">
+              <h4 style="margin: 0 0 10px; font-size: 0.92rem; color: #475569;">Species Probability Breakdown</h4>
+              {% for item in result.probabilities %}
+                <div class="prob-row">
+                  <div>
+                    <span>{{ item.species }}</span>
+                    <strong>{{ '%.2f'|format(item.confidence) }}%</strong>
+                  </div>
+                  <div class="track">
+                    <i style="width: {{ item.confidence }}%"></i>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+      {% else %}
+        <div style="padding: 30px 15px; text-align: center; color: #64748b; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 12px;">
+          <p style="margin: 0; font-size: 0.95rem;">No image uploaded yet.</p>
+          <p style="margin: 6px 0 0; font-size: 0.85rem;">Select an image on the left and click <strong>Predict Species from Image</strong> to view results.</p>
+        </div>
+      {% endif %}
+
+      <div style="margin-top: 24px; padding-top: 18px; border-top: 1px solid #edf0f6;">
+        <h4 style="margin: 0 0 8px; font-size: 0.9rem;">Supported Iris Species</h4>
+        <ul style="margin: 0; padding-left: 20px; color: #64748b; font-size: 0.85rem; line-height: 1.6;">
+          <li><strong>Iris setosa</strong> (Class 0)</li>
+          <li><strong>Iris versicolor</strong> (Class 1)</li>
+          <li><strong>Iris virginica</strong> (Class 2)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  PetalWise · Educational machine learning demo ·
+  <a href="{{ url_for('index') }}" style="color: #6d28d9; text-decoration: none;">Return to Home</a>
+</footer>
+</body>
+</html>

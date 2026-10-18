@@ -1,0 +1,38 @@
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Python byte-code and caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Environment variables, credentials and secrets
+.env
+.env.*
+*.pem
+*.key
+*.cert
+secrets/
+
+# IDE and OS temporary files
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Local backups and temporary edit files
+_backup_pre_fix/
+*.bak
+
+# Runtime user uploads (preserve directory via .gitkeep)
+static/uploads/*
+!static/uploads/.gitkeep
